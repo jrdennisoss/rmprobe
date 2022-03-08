@@ -1,0 +1,52 @@
+
+# Mute STDOUT messages
+MUTESTDOUT 1
+
+# Preserve the current VGA mode
+STORVGAMODE
+
+# Set LOTR Video Mode
+CALLVBIOS 0 13 0 0 0
+
+# Reset the ReelMagic Card
+CALLRM E 0 0 0 0
+
+# Same calls as RTZ does
+CALLRM 9 0 409 140 C8
+CALLRM 9 0 408 0 0
+
+# Open a file to play
+CALLRM 1 0 1 "D:\CORP\SIGLOGO.MPG"
+STORHAND 0
+
+# check it
+CALLRM A HAND0 202 0 0
+
+# Play the video
+CALLRM 3 HAND0 1 0 0
+
+# Let it play for a few seconds
+SLEEP 3
+
+# Stop the video
+CALLRM 4 HAND0 0 0 0
+
+# Wait for a few seconds
+SLEEP 3
+
+# Resume (?) the video
+CALLRM 3 HAND0 1 0 0
+
+# Wait for play to complete
+WAITPLAY HAND0
+
+# Close the opened file
+CALLRM 2 HAND0 0 0 0
+
+# Reset the ReelMagic Card
+CALLRM E 0 0 0 0
+
+#Restore the previous VGA mode
+LOADVGAMODE
+
+

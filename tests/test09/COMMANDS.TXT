@@ -1,0 +1,46 @@
+
+# Mute STDOUT messages
+MUTESTDOUT 1
+
+# Preserve the current VGA mode
+STORVGAMODE
+
+# Set RTZ Video Mode
+CALLVBIOS 0 13 0 0 0
+
+# Reset the ReelMagic Card
+CALLRM E 0 0 0 0
+
+# Same calls as RTZ does
+CALLRM 9 0 40C 0 0
+CALLRM 9 0 40D 0 0
+CALLRM 9 0 408 0 0
+CALLRM 9 0 409 0 0
+CALLRM B 0 2000 CBFUNC
+CALLRM 9 0 210 4041 4004
+
+# Open a file to play
+CALLRM 1 0 2 "D:\CORP\SIGLOGO.MPG"
+STORHAND 0
+
+# Do something (Z-Order i think?) with the video
+CALLRM A HAND0 202 0 0
+CALLRM 9 HAND0 40E 4 0
+CALLRM A HAND0 208 0 0
+
+# Play the video
+CALLRM 3 HAND0 1 0 0
+
+# Wait for play to complete
+WAITPLAY HAND0
+
+# Close the opened file
+CALLRM 2 HAND0 0 0 0
+
+# Reset the ReelMagic Card
+CALLRM E 0 0 0 0
+
+#Restore the previous VGA mode
+LOADVGAMODE
+
+

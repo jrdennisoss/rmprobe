@@ -1,0 +1,33 @@
+
+# Mute STDOUT messages
+MUTESTDOUT 1
+
+# Preserve the current VGA mode
+STORVGAMODE
+
+# Set EGA 640x480 Mode
+CALLVBIOS 0 12 0 0 0
+
+# Reset the ReelMagic Card
+CALLRM E 0 0 0 0
+
+# Register Our Callback Function The Horde Style
+CALLRM B 0 0 CBFUNC
+
+# Open a file to play
+CALLRM 1 0 1 "D:\CORP\SIGLOGO.MPG"
+STORHAND 0
+
+# Play the video
+CALLRM 3 HAND0 1 0 0
+
+# Wait for play to complete
+WAITPLAY HAND0
+
+# Close the opened file
+CALLRM 2 HAND0 0 0 0
+
+#Restore the previous VGA mode
+LOADVGAMODE
+
+

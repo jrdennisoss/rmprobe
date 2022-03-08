@@ -1,0 +1,55 @@
+
+# Mute STDOUT messages
+MUTESTDOUT 1
+
+# Preserve the current VGA mode
+STORVGAMODE
+
+# Set The Horde Video Mode
+CALLVBIOS 0 13 0 0 0
+
+# Reset the ReelMagic Card
+CALLRM E 0 0 0 0
+
+# Same calls as The Horde does
+CALLRM B 0 0 CBFUNC
+CALLRM 9 0 408 0 0
+CALLRM 9 0 409 140 C8
+CALLRM 9 0 40E 2 0
+CALLRM 9 0 210 7088 C39D
+
+# Open a file to play
+CALLRM 1 0 1 "D:\CORP\SIGLOGO.MPG"
+STORHAND 0
+
+# check it and do something unknown ???
+CALLRM A HAND0 202 0 0
+CALLRM 9 HAND0 407 140 F
+CALLRM 9 HAND0 406 10 0
+
+
+# Play the video
+CALLRM 3 HAND0 0 0 0
+
+# Wait for play to complete
+WAITPLAY HAND0
+
+# sleep for a sec
+SLEEP 1
+
+# stop it (i think ?)
+CALLRM 4 HAND0 0 0 0
+
+# sleep for another sec
+SLEEP 1
+
+# Close the opened file
+CALLRM 2 HAND0 0 0 0
+
+# Reset the ReelMagic Card
+CALLRM E 0 0 0 0
+
+#Restore the previous VGA mode
+LOADVGAMODE
+
+
