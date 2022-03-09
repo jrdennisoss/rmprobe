@@ -64,14 +64,109 @@ find_fmpdriver(void) {
   return 0; //failed -- driver not found
 }
 
-static void __far __stdcall
-driver_callback(unsigned p1, unsigned p2, unsigned p3, unsigned p4) {
-  logf("driver_callback(%04Xh, %04Xh, %04Xh, %04Xh)\n",
-    (unsigned)p1,
-    (unsigned)p2,
-    (unsigned)p3,
-    (unsigned)p4
+/* static void __far __cdecl */
+static void __watcall
+driver_callback(unsigned * p) {
+  logf("driver_callback(%04Xh, %04Xh, %04Xh, %04Xh, %04Xh, %04Xh)\n",
+    (unsigned)p[0],
+    (unsigned)p[1],
+    (unsigned)p[2],
+    (unsigned)p[3],
+    (unsigned)p[4],
+    (unsigned)p[5]
   );
+}
+
+/* this is SUPER paranoid, but I dont wanna take any chances... after all, this is a test tool... 
+   all this bullshit ensures that the state (segments, registers, etc) absolutely does not change 
+   from the time we go into "driver_callback()" to the moment we return back to the caller...
+
+   I guess one could call this mess a 1980's version of a closure...
+*/
+static void __far *
+build_driver_callback_shim(void) {
+  unsigned rv_seg;
+  unsigned rv_off;
+
+  __asm {
+    JMP shimgetter
+    getra:
+      POP AX
+      JMP AX
+    getaboveshimoffset:
+      CALL getra
+      RET
+    drvcbshim:
+      PUSH BP
+      PUSH AX
+      PUSH BX
+      PUSH CX
+      PUSH DX
+      PUSH SI
+      PUSH DI
+      PUSH DS
+      PUSH ES
+      CALL loadds
+      MOV  AX, SP
+      ADD  AX, 22  /* 9 word pushes + return seg + off */
+      CALL driver_callback
+      POP ES
+      POP DS
+      POP DI
+      POP SI
+      POP DX
+      POP CX
+      POP BX
+      POP AX
+      POP BP
+      RETF
+
+    getabovedsptr:
+      CALL getra
+      RET
+    dsval:
+      DW 0  /* what a fine fucking place to preserve the actual data segment... :-( */
+    getdsvalptr:
+      CALL getabovedsptr
+      ADD AX, 1 /* +1 = skip over the RET in getabovedsptr */
+      RET
+    loadds:
+      PUSH AX
+      PUSH SI
+      CALL getdsvalptr
+      MOV SI, AX
+      MOV AX, CS
+      MOV DS, AX
+      LODSW
+      MOV DS, AX
+      POP SI
+      POP AX
+      RET
+    stords:
+      PUSH AX
+      PUSH ES
+      PUSH DI
+      CALL getdsvalptr
+      MOV DI, AX
+      MOV AX, CS
+      MOV ES, AX
+      MOV AX, DS
+      STOSW
+      POP DI
+      POP ES
+      POP AX
+      RET
+    shimgetter:
+      CALL stords /* store the DS value in the code segment for retrival later */
+      MOV rv_seg, CS
+      PUSH AX
+      CALL getaboveshimoffset
+      ADD AX, 1 /* the RET in getaboveshimoffset is 1 byte of instructions...  this is so hacky! what the hell am i missing in watcom for asm labels !? */
+      MOV rv_off, AX
+      POP AX
+  };
+
+  return MK_FP(rv_seg, rv_off);
 }
 
 static uint16_t
@@ -248,7 +343,7 @@ process_script_line(char *line) {
         ptr = strstart;
       }
       else if (strstr(line+7, "CBFUNC") != NULL) {
-        ptr = &driver_callback;
+        ptr = build_driver_callback_shim();
       }
       else if (strstr(line+7, "STRBUF") != NULL) {
         ptr = &_strbuf;
