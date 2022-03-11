@@ -191,6 +191,25 @@ Observations to record:
 * Did the tool return back to the DOS prompt as expected?
 * Did the tool return the video mode back to normal?
 
+## Test 12
+
+This test attempts to re-create the behavior of the way The RTZ calls ReelMagic and
+understand the way VGA graphics overlay's on top of the MPEG stream.
+
+To run this test:
+```
+RMPROBE.EXE TESTS\TEST12
+```
+
+Observations to record:
+
+* The `RMPROBE.LOG` file located in the test directory.
+* Did the video play as expected?
+* Did the tool return back to the DOS prompt as expected?
+* Did the tool return the video mode back to normal?
+* Was the debug text overlayed on the screen?
+
+
 
 # Compiling
 
