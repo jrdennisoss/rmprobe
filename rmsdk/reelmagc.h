@@ -31,7 +31,6 @@ typedef uint8_t rm_handle_t;
 /* ReelMagic "Direct-Drive" Functions */
 uint8_t rm_probe_fmpdrv_int(void);
 void rm_set_fmpdrv_int(const uint8_t intnum);
-void rm_set_cb(rm_driver_cb_t cbfunc, uint16_t cbmode);
 uint16_t rm_call_rmdevsys(const uint8_t function, const uint16_t subfunction, const uint16_t param1, const uint16_t param2);
 uint32_t rm_call_fmpdrv(const uint8_t,const rm_handle_t,const uint16_t,const uint16_t,const uint16_t);
 
@@ -40,7 +39,7 @@ rm_call_fmpdrv_ptr(
   const uint8_t command,
   const rm_handle_t handle,
   const uint16_t subfunc,
-  void __far * const ptr) {
+  const void __far * const ptr) {
   return rm_call_fmpdrv(command, handle, subfunc,
     FP_OFF(ptr), FP_SEG(ptr));
 }
@@ -74,7 +73,7 @@ void rm_register_driver_callback(rm_driver_cb_t cbfunc, uint16_t cbmode);
 #define RMCBMODE_REGISTER (0)
 #define RMCBMODE_STACK    (0x2000)
 
-rm_handle_t rm_open(const void * const filename, uint16_t flags);
+rm_handle_t rm_open(const void __far * const filename, uint16_t flags);
 #define RMOPEN_FILE (1)
 #define RMOPEN_STREAM (2)
 
@@ -102,6 +101,9 @@ void rm_set_zorder(rm_handle_t handle, uint16_t value);
 void rm_set_magic_key(rm_handle_t handle, uint16_t k1, uint16_t k2);
 
 void rm_waitplay(const rm_handle_t handle, const unsigned sleep_interval);
+
+void rm_submit_buffer(rm_handle_t handle, const void __far * const buf, const unsigned size);
+
 
 
 
