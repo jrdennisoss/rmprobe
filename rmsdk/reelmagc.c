@@ -258,6 +258,11 @@ rm_get_play_status(rm_handle_t handle) {
   return rm_get(handle, 0x204);
 }
 
+uint32_t
+rm_get_bytes_decoded(rm_handle_t handle) {
+  return rm_get(handle, 0x206);
+}
+
 void
 rm_set_zorder(rm_handle_t handle, uint16_t value) {
   rm_set(handle, 0x40E, value, 0);

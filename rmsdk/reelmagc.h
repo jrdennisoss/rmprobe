@@ -80,7 +80,9 @@ rm_handle_t rm_open(const void __far * const filename, uint16_t flags);
 void rm_close(rm_handle_t handle);
 
 void rm_play(rm_handle_t handle, uint16_t flags);
+#define RMPLAY_STOP_ON_FINISH (0)
 #define RMPLAY_PAUSE_ON_FINISH (1)
+#define RMPLAY_PLAY_IN_LOOP (4)
 
 void rm_pause(rm_handle_t handle);
 
@@ -93,6 +95,8 @@ uint16_t rm_get_play_status(rm_handle_t handle);
 #define RMSTATUS_ISPLAYING(STATUS) ((STATUS & 3) == 0)
 #define RMSTATUS_ISPAUSED(STATUS)   (STATUS & 1)
 #define RMSTATUS_ISSTOPPED(STATUS)  (STATUS & 2)
+
+uint32_t rm_get_bytes_decoded(rm_handle_t handle);
 
 void rm_set_zorder(rm_handle_t handle, uint16_t value);
 #define RMZORDER_ABOVEVGA  (2)
