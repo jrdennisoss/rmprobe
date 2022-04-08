@@ -74,8 +74,10 @@ void rm_register_driver_callback(rm_driver_cb_t cbfunc, uint16_t cbmode);
 #define RMCBMODE_STACK    (0x2000)
 
 rm_handle_t rm_open(const void __far * const filename, uint16_t flags);
-#define RMOPEN_FILE (1)
-#define RMOPEN_STREAM (2)
+#define RMOPEN_FILE          (0x0001)
+#define RMOPEN_STREAM        (0x0002)
+#define RMOPEN_ALWAYSSUCCEED (0x0100)
+#define RMOPEN_STRLENPREFIX  (0x1000)
 
 void rm_close(rm_handle_t handle);
 
