@@ -303,7 +303,7 @@ install_fmpdrv_recorder(void) {
       RET
     intcall: /* this is the label of the actual call we place in the IVT */
       DB 0xEB    /* JMP over... */
-      DB 0x0B    /* ... the next 11 bytes (needed for ReelMagic detection) */
+      DB 0x1A    /* ... the next 26 bytes (needed for ReelMagic detection) */
       DB 0x09    
       DB 'F'
       DB 'M'
@@ -314,6 +314,22 @@ install_fmpdrv_recorder(void) {
       DB 'v'
       DB 'e'
       DB 'r'
+      DB 0x00
+
+      DB 0x0D    
+      DB 'R'
+      DB 'e'
+      DB 'e'
+      DB 'l'
+      DB 'M'
+      DB 'a'
+      DB 'g'
+      DB 'i'
+      DB 'c'
+      DB '('
+      DB 'T'
+      DB 'M'
+      DB ')'
       DB 0x00
 
       /* record the entry */
