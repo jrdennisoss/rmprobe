@@ -32,7 +32,7 @@ typedef uint8_t rm_handle_t;
 uint8_t rm_probe_fmpdrv_int(void);
 void rm_set_fmpdrv_int(const uint8_t intnum);
 uint16_t rm_call_rmdevsys(const uint8_t function, const uint16_t subfunction, const uint16_t param1, const uint16_t param2);
-uint32_t rm_call_fmpdrv(const uint8_t,const rm_handle_t,const uint16_t,const uint16_t,const uint16_t);
+uint32_t rm_call_fmpdrv(const uint8_t command,const rm_handle_t handle,const uint16_t subfunc,const uint16_t param1,const uint16_t param2);
 
 static inline uint32_t
 rm_call_fmpdrv_ptr(

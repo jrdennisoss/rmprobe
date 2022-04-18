@@ -36,11 +36,13 @@ static rm_driver_cb_t  _driver_cb_func = NULL;
 */
 static uint16_t __far __cdecl
 marshall_stack_callback(unsigned v1, unsigned v2, unsigned v3, unsigned v4) {
+  //XXX need to "CLD" here?
   return (*_driver_cb_func)(v1,v2,v3,v4);
 }
 
 static uint16_t __far __watcall
 marshall_register_callback(uint16_t pax, uint16_t pdx, uint16_t pbx, uint16_t pcx) {
+  //XXX need to "CLD" here?
   return (*_driver_cb_func)(pbx>>8, pbx & 0xff, pax, pdx);
 }
 
